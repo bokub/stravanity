@@ -1,3 +1,5 @@
+import { Bounds } from '@/types';
+
 export function formatDistance(d: number | undefined) {
   if (d === 0) {
     return '0 m';
@@ -32,4 +34,8 @@ export function parseTime(t: string): number {
     return Number(t.split(':')[1]) + 60 * Number(t.split(':')[0]);
   }
   return 0;
+}
+
+export function isInBounds(p: [number, number], bounds: Bounds): boolean {
+  return p[0] >= bounds[0] && p[0] <= bounds[2] && p[1] >= bounds[1] && p[1] <= bounds[3];
 }

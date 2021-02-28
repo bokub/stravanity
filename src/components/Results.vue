@@ -10,7 +10,7 @@
           <label class="btn btn-outline-primary" for="course-record-radio">Course Record</label>
         </div>
       </div>
-      <div class="col-auto">
+      <div class="col-auto mb-4">
         <div class="btn-group">
           <input type="radio" class="btn-check" id="overall-radio" v-model="onlyWomen" :value="false" />
           <label class="btn btn-outline-primary" for="overall-radio">Overall</label>
@@ -35,7 +35,7 @@
   import { RecordType, Segment } from '@/types';
   import LocalLegendResult from '@/components/LocalLegendResult.vue';
   import CourseRecordResult from '@/components/CourseRecordResult.vue';
-  import { parseTime } from '@/utils';
+  import { isInBounds, parseTime } from '@/utils';
   import Result from '@/components/Result.vue';
 
   export default defineComponent({
@@ -44,6 +44,10 @@
     props: {
       segments: {
         type: Array as PropType<Segment[]>,
+        required: true
+      },
+      bounds: {
+        type: Object as PropType<[number, number, number, number]>,
         required: true
       }
     },
@@ -54,8 +58,13 @@
     }),
 
     computed: {
+      visibleSegments(): Segment[] {
+        return this.segments.filter((s: Segment) => {
+          return isInBounds(s.start_latlng, this.bounds) || isInBounds(s.end_latlng, this.bounds);
+        });
+      },
       orderedSegments(): Segment[] {
-        const array: Segment[] = this.segments.map((s: Segment) => {
+        const array: Segment[] = this.visibleSegments.map((s: Segment) => {
           s.computed = {};
           if (s.details) {
             if (s.local_legend_enabled && s.details.local_legend) {

@@ -1,5 +1,5 @@
 <template>
-  <div id="map" :style="{ height: mapHeight + 'px' }"></div>
+  <div id="map"></div>
 </template>
 
 <script lang="ts">
@@ -15,12 +15,8 @@
   export default defineComponent({
     name: 'Map',
     data: () => ({
-      map: null as Map | null,
-      mapHeight: 200
+      map: null as Map | null
     }),
-    created() {
-      this.mapHeight = document.documentElement.clientHeight - 300;
-    },
     mounted() {
       this.map = L.map('map').setView([43.59662415307981, 1.4523397851263156], 13);
 
@@ -103,6 +99,7 @@
 <style lang="scss">
   #map {
     min-height: 200px;
+    height: calc(100vh - 200px);
 
     .fa-map-marker {
       display: block;

@@ -44,3 +44,5 @@ export type Computed = {
   speedRecord?: number;
   bestTimeString?: string;
 };
+
+export type Bounds = [number, number, number, number];

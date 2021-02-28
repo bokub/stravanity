@@ -1,28 +1,19 @@
 <template>
   <div class="container bg-white shadow rounded px-3 py-3 my-3">
-    <div class="row justify-content-around mt-3 mb-4">
-      <div class="col text-center">
-        <h1 class="display-3 title">Stravanity</h1>
-        <h2>Easy to beat Strava segments</h2>
-      </div>
-    </div>
+    <Top class="mt-3 mb-4 mx-2"></Top>
     <Problems v-bind="problems"></Problems>
     <div class="row">
-      <div class="col">
+      <div class="col-12 col-lg-6">
         <Map @move="loadSegments" ref="map"></Map>
+        <img src="/img/powered-by-strava.svg" alt="Powered by Strava" height="30" class="float-end" />
       </div>
-      <div class="col">
-        <Results :segments="segmentsArray" v-if="segmentsArray.length > 0"></Results>
+      <div class="col-12 col-lg-6">
+        <Results :segments="segmentsArray" :bounds="bounds" v-if="bounds && segmentsArray.length > 0"></Results>
         <div v-if="problems.notConnected" class="pt-5 text-center">
           <h4>
             <span class="text-muted">Not connected</span>
           </h4>
         </div>
-      </div>
-    </div>
-    <div class="row justify-content-end">
-      <div class="col-auto">
-        <img src="/img/powered-by-strava.svg" alt="Powered by Strava" height="30" />
       </div>
     </div>
   </div>
@@ -32,10 +23,11 @@
   import { defineComponent } from 'vue';
   import Map from './components/Map.vue';
   import Results from './components/Results.vue';
-  import { Segment, SegmentDetails } from './types';
+  import { Bounds, Segment, SegmentDetails } from './types';
   import Cookies from 'js-cookie';
   import axios from 'axios';
   import Problems from '@/components/Problems.vue';
+  import Top from '@/components/Top.vue';
 
   const api = axios.create({
     baseURL: 'https://www.strava.com/api/v3/',
@@ -47,12 +39,14 @@
   export default defineComponent({
     name: 'App',
     components: {
+      Top,
       Problems,
       Map,
       Results
     },
     data: () => ({
       segments: {} as { [key: string]: Segment },
+      bounds: undefined as Bounds | undefined,
       problems: {
         limitReached: false,
         notConnected: false
@@ -76,7 +70,9 @@
       );
     },
     methods: {
-      async loadSegments(bounds: number[]) {
+      async loadSegments(bounds: Bounds) {
+        this.bounds = bounds;
+
         const payload: Segment[] = await api
           .get('/segments/explore', {
             params: {
