@@ -27,8 +27,8 @@
     props: {
       segment: {
         type: Object as PropType<Segment>,
-        required: true
-      }
+        required: true,
+      },
     },
     computed: {
       distance(): string {
@@ -36,7 +36,7 @@
       },
       speed(): string {
         return formatSpeed(this.segment.computed?.speedRecord);
-      }
-    }
+      },
+    },
   });
 </script>

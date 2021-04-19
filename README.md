@@ -24,6 +24,6 @@ Visit [stravanity.vercel.app](https://stravanity.vercel.app/) to try it.
 
 ### How to use Stravanity
 
-Just explore the map to load segments. Use a high zoom level to load less popular (and probably easier) segments.
+Just explore the map to load segments. Use a high zoom level to load less popular (and probably easier) segments, then zoom out to see everything you've loaded.
 
 Stravanity will show you a list of the segments visible on the map, ordered from the easiest to the most difficult

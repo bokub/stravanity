@@ -1,7 +1,6 @@
 export type Segment = {
   id: string;
   points: string;
-  distance: number;
   name: string;
   start_latlng: [number, number];
   end_latlng: [number, number];
@@ -34,7 +33,7 @@ export type Xoms = {
 
 export enum RecordType {
   LocalLegend = 'LocalLegend',
-  CourseRecord = 'CourseRecord'
+  CourseRecord = 'CourseRecord',
 }
 
 export type Computed = {

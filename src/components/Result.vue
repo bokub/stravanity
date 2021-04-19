@@ -25,19 +25,18 @@
     props: {
       segment: {
         type: Object as PropType<Segment>,
-        required: true
+        required: true,
       },
       index: {
         type: Number,
-        required: true
-      }
+        required: true,
+      },
     },
     methods: {
       fitBounds() {
         (this.$root?.$refs.map as any).fitBounds([this.segment.start_latlng, this.segment.end_latlng]);
-        console.log(this.segment);
-      }
-    }
+      },
+    },
   });
 </script>
 

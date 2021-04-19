@@ -27,8 +27,8 @@
     props: {
       segment: {
         type: Object as PropType<Segment>,
-        required: true
-      }
+        required: true,
+      },
     },
     computed: {
       distance(): string {
@@ -36,7 +36,7 @@
       },
       totalDistance(): string {
         return formatDistance(this.segment.computed?.distanceToLocalLegend);
-      }
-    }
+      },
+    },
   });
 </script>

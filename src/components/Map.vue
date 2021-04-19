@@ -15,7 +15,7 @@
   export default defineComponent({
     name: 'Map',
     data: () => ({
-      map: null as Map | null
+      map: null as Map | null,
     }),
     mounted() {
       this.map = L.map('map').setView([43.59662415307981, 1.4523397851263156], 13);
@@ -24,25 +24,28 @@
 
       (L.control as any)
         .locate({
-          position: 'topright'
+          position: 'topright',
         } as LocateOptions)
         .addTo(this.map);
 
-      this.map.whenReady(() => this.onMoveEnd());
+      this.map.whenReady(() => {
+        this.$emit('ready');
+        this.onMoveEnd();
+      });
 
       // Fixing Leaflet bugs...
       L.Tooltip.include({
-        _updatePosition: function() {
+        _updatePosition: function () {
           if (this._map) {
             this._setPosition(this._map.latLngToLayerPoint(this._latlng));
           }
         },
-        _animateZoom: function(e: any) {
+        _animateZoom: function (e: any) {
           if (this._map) {
             const pos = this._map._latLngToNewLayerPoint(this._latlng, e.zoom, e.center);
             this._setPosition(pos);
           }
-        }
+        },
       });
 
       if (this.map) {
@@ -51,9 +54,9 @@
           {
             tileSize: 256,
             subdomains: '1234',
-            attribution: '&copy; HERE ' + new Date().getFullYear()
+            attribution: '&copy; HERE ' + new Date().getFullYear(),
           }
-        ).addTo(this.map);
+        ).addTo(this.map as Map);
 
         this.map.on(
           'moveend',
@@ -76,23 +79,23 @@
       drawSegment(segment: Segment) {
         const polyline = L.polyline(decode(segment.points), {
           color: ORANGE,
-          interactive: false
+          interactive: false,
         });
         const marker = L.circleMarker(segment.start_latlng, {
           radius: 6,
           stroke: false,
           fillColor: ORANGE,
-          fillOpacity: 1
+          fillOpacity: 1,
         });
         const tooltip = L.tooltip().setContent(segment.name);
 
         if (this.map) {
-          polyline.addTo(this.map);
-          marker.addTo(this.map);
+          polyline.addTo(this.map as Map);
+          marker.addTo(this.map as Map);
           marker.bindTooltip(tooltip);
         }
-      }
-    }
+      },
+    },
   });
 </script>
 

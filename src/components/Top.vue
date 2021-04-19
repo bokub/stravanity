@@ -26,8 +26,9 @@
                   rolling 90-day period regardless of pace or speed.
                   <br />
                   <div class="text-muted my-1">
-                    Stravanity computes the <u>total distance</u> you need to run in order to beat the current local
-                    legend
+                    Stravanity computes the
+                    <u>total distance</u>
+                    you need to run in order to beat the current local legend
                   </div>
                 </div>
               </li>
@@ -38,8 +39,9 @@
                   leaderboard.
                   <br />
                   <div class="text-muted my-1">
-                    Stravanity computes the <u>average speed</u> you need to run in order to beat the current course
-                    record
+                    Stravanity computes the
+                    <u>average speed</u>
+                    you need to run in order to beat the current course record
                   </div>
                 </div>
               </li>
@@ -49,7 +51,7 @@
             <div>
               <div>
                 Just explore the map to load segments. Use a high zoom level to load less popular (and probably easier)
-                segments.
+                segments, then zoom out to see everything you've loaded.
               </div>
               <div>
                 Stravanity will show you a list of the segments visible on the map, ordered from the easiest to the most
@@ -67,7 +69,7 @@
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    name: 'Top'
+    name: 'Top',
   });
 </script>
 

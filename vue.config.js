@@ -1,6 +1,6 @@
 module.exports = {
   pwa: {
     name: 'Stravanity',
-    themeColor: '#fc5200'
-  }
+    themeColor: '#fc5200',
+  },
 };

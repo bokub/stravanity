@@ -44,17 +44,17 @@
     props: {
       segments: {
         type: Array as PropType<Segment[]>,
-        required: true
+        required: true,
       },
       bounds: {
         type: Object as PropType<[number, number, number, number]>,
-        required: true
-      }
+        required: true,
+      },
     },
 
     data: () => ({
       recordType: RecordType.LocalLegend,
-      onlyWomen: false
+      onlyWomen: false,
     }),
 
     computed: {
@@ -89,15 +89,15 @@
         if (this.recordType === RecordType.LocalLegend) {
           // Sort by distance
           array.sort((a, b) => (a.computed?.distanceToLocalLegend || 0) - (b.computed?.distanceToLocalLegend || 0));
-          return array.filter(s => s.local_legend_enabled && s.computed?.distanceToLocalLegend);
+          return array.filter((s) => s.local_legend_enabled && s.computed?.distanceToLocalLegend);
         }
         if (this.recordType === RecordType.CourseRecord) {
           // Sort by speed
           array.sort((a, b) => (b.computed?.speedRecord || 0) - (a.computed?.speedRecord || 0));
-          return array.filter(s => s.computed?.speedRecord);
+          return array.filter((s) => s.computed?.speedRecord);
         }
         return array;
-      }
-    }
+      },
+    },
   });
 </script>
