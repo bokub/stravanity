@@ -1,6 +1,5 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import './registerServiceWorker';
 import Cookies from 'js-cookie';
 
 if (Cookies.get('refresh_token') && !Cookies.get('access_token')) {

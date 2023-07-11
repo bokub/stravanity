@@ -1,9 +1,10 @@
 import strava from 'strava-v3';
 import { serialize } from 'cookie';
 import axios from 'axios';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-module.exports = async (req, res) => {
-  if (req.query.code) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.query.code && typeof req.query.code === 'string') {
     try {
       const payload = await (req.query.refresh
         ? strava.oauth.refreshToken(req.query.code)
@@ -36,4 +37,4 @@ module.exports = async (req, res) => {
     }
   }
   res.redirect(302, '/');
-};
+}
