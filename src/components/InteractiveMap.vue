@@ -4,16 +4,16 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import L, { LocateOptions, Map } from 'leaflet';
+  import L, { type LocateOptions, Map } from 'leaflet';
   import 'leaflet.locatecontrol';
   import { debounce } from 'debounce';
-  import { Segment } from '@/types';
+  import { type Segment } from '@/types';
   import { decode } from '@mapbox/polyline';
 
   const ORANGE = '#fc5200';
 
   export default defineComponent({
-    name: 'Map',
+    name: 'InteractiveMap',
     data: () => ({
       map: null as Map | null,
     }),
@@ -50,7 +50,9 @@
 
       if (this.map) {
         L.tileLayer(
-          `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/reduced.day/{z}/{x}/{y}/256/png?apiKey=${process.env.VUE_APP_HERE_MAPS_API_KEY}`,
+          `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/reduced.day/{z}/{x}/{y}/256/png?apiKey=${
+            import.meta.env.VITE_HERE_MAPS_API_KEY
+          }`,
           {
             tileSize: 256,
             subdomains: '1234',

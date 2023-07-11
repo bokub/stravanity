@@ -31,8 +31,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from 'vue';
-  import { RecordType, Segment } from '@/types';
+  import { defineComponent, type PropType } from 'vue';
+  import { RecordType, type Segment } from '@/types';
   import LocalLegendResult from '@/components/LocalLegendResult.vue';
   import CourseRecordResult from '@/components/CourseRecordResult.vue';
   import { isInBounds, parseTime } from '@/utils';

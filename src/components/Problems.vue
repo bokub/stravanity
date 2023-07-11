@@ -54,7 +54,7 @@
         const params = new URLSearchParams();
         params.append('scope', 'read');
         params.append('response_type', 'code');
-        params.append('client_id', process.env.VUE_APP_STRAVA_CLIENT_ID);
+        params.append('client_id', import.meta.env.VITE_STRAVA_CLIENT_ID);
         params.append('redirect_uri', `${window.location.protocol}//${window.location.host}/api/login`);
         return `https://www.strava.com/oauth/authorize?${params.toString()}`;
       },

@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from 'vue';
-  import { Segment } from '@/types';
+  import { defineComponent, type PropType } from 'vue';
+  import { type Segment } from '@/types';
   import { formatDistance, formatSpeed } from '@/utils';
 
   export default defineComponent({

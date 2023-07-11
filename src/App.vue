@@ -4,7 +4,7 @@
     <Problems v-bind="problems"></Problems>
     <div class="row">
       <div class="col-12 col-lg-6">
-        <Map @move="loadSegments" @ready="onMapReady" ref="map"></Map>
+        <InteractiveMap @move="loadSegments" @ready="onMapReady" ref="map"></InteractiveMap>
         <img src="/img/powered-by-strava.svg" alt="Powered by Strava" height="30" class="float-end" />
       </div>
       <div class="col-12 col-lg-6">
@@ -21,9 +21,9 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import Map from './components/Map.vue';
+  import InteractiveMap from './components/InteractiveMap.vue';
   import Results from './components/Results.vue';
-  import { Bounds, Segment, SegmentDetails } from './types';
+  import { type Bounds, type Segment, type SegmentDetails } from '@/types';
   import Cookies from 'js-cookie';
   import axios from 'axios';
   import Problems from '@/components/Problems.vue';
@@ -43,7 +43,7 @@
     components: {
       Top,
       Problems,
-      Map,
+      InteractiveMap,
       Results,
     },
     data: () => ({

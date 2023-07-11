@@ -1,4 +1,4 @@
-import { Bounds } from '@/types';
+import { type Bounds } from '@/types';
 
 export function formatDistance(d: number | undefined) {
   if (d === 0) {
