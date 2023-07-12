@@ -18,19 +18,33 @@
       map: null as Map | null,
     }),
     mounted() {
-      this.map = L.map('map').setView([43.59662415307981, 1.4523397851263156], 13);
+      this.map = L.map('map').setView([0.66, 0.42], 2);
 
       this.map.zoomControl.setPosition('topright');
 
-      (L.control as any)
-        .locate({
-          position: 'topright',
-        } as LocateOptions)
-        .addTo(this.map);
+      const locator = (L.control as any).locate({ position: 'topright' } as LocateOptions).addTo(this.map);
+
+      const locatorMessage = (L.control as any)({ position: 'topright' });
+
+      locatorMessage.onAdd = function () {
+        this._div = L.DomUtil.create('div', 'welcome-locator border border-primary text-primary bg-white rounded');
+        this._div.innerHTML = '<div>Locate yourself to start using the map<img src="/img/arrow-turn-up.svg" /></div>';
+        return this._div;
+      };
+
+      navigator.permissions?.query({ name: 'geolocation' }).then((PermissionStatus) => {
+        if (PermissionStatus.state == 'granted') {
+          // If location is enabled
+          locator.start();
+        } else {
+          // If location is disabled or not granted
+          locatorMessage.addTo(this.map);
+          (this.map as any)._handlers.forEach((handler) => handler.disable());
+        }
+      });
 
       this.map.whenReady(() => {
         this.$emit('ready');
-        this.onMoveEnd();
       });
 
       // Fixing Leaflet bugs...
@@ -66,6 +80,13 @@
             this.onMoveEnd();
           }, 250)
         );
+
+        this.map.addEventListener('locationfound', () => {
+          if (locatorMessage._map) {
+            locatorMessage.remove();
+            (this.map as any)._handlers.forEach((handler) => handler.enable());
+          }
+        });
       }
     },
 
@@ -113,6 +134,17 @@
       height: 30px;
       background: url(../assets/locate.svg) no-repeat center;
       background-size: 20px;
+    }
+
+    .welcome-locator {
+      font-size: 16px;
+      font-weight: bold;
+      padding: 8px 12px;
+      img {
+        position: relative;
+        bottom: 6px;
+        margin-left: 6px;
+      }
     }
   }
 </style>
