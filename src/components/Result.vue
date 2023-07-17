@@ -1,12 +1,18 @@
 <template>
   <div class="card mb-2">
-    <div class="card-body pb-1" @click="fitBounds">
+    <div
+      class="card-body pb-1"
+      :class="{ 'bg-secondary bg-opacity-10': highlighted }"
+      @click="$emit('highlight', segment.id)"
+    >
       <div class="row mb-2">
         <div class="col-auto">
           <span class="h5 text-muted">#{{ index }}</span>
         </div>
         <div class="col ps-0">
-          <span class="card-title text-primary h6">{{ segment.name }}</span>
+          <span class="card-title h6" :class="highlighted ? 'text-secondary fw-bold' : 'text-primary'">
+            {{ segment.name }}
+          </span>
         </div>
         <div class="col-auto">
           <img :src="segment.elevation_profile" alt="Elevation profile" height="25" />
@@ -31,10 +37,9 @@
         type: Number,
         required: true,
       },
-    },
-    methods: {
-      fitBounds() {
-        (this.$root?.$refs.map as any).fitBounds([this.segment.start_latlng, this.segment.end_latlng]);
+      highlighted: {
+        type: Boolean,
+        default: false,
       },
     },
   });

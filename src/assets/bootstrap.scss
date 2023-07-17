@@ -1,5 +1,6 @@
 // Variables
 $primary: #fc5200;
+$secondary: #2a93ee;
 $font-family-sans-serif: 'Fira Sans', sans-serif;
 $min-contrast-ratio: 3;
 $body-bg: #f8f9fa;
@@ -9,7 +10,7 @@ $body-bg: #f8f9fa;
 @import '../../node_modules/bootstrap/scss/variables';
 @import '../../node_modules/bootstrap/scss/variables-dark';
 
-$theme-colors: map-remove($theme-colors, 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark');
+$theme-colors: map-remove($theme-colors, 'success', 'info', 'warning', 'danger', 'light', 'dark');
 
 @import '../../node_modules/bootstrap/scss/maps';
 @import '../../node_modules/bootstrap/scss/mixins';

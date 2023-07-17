@@ -1,5 +1,5 @@
 export type Segment = {
-  id: string;
+  id: number;
   points: string;
   name: string;
   start_latlng: [number, number];

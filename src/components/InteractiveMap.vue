@@ -4,18 +4,21 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import L, { type LocateOptions, Map } from 'leaflet';
+  import L, { Handler, type LocateOptions, Map } from 'leaflet';
   import 'leaflet.locatecontrol';
   import { debounce } from 'debounce';
   import { type Segment } from '@/types';
   import { decode } from '@mapbox/polyline';
 
-  const ORANGE = '#fc5200';
+  const ORANGE = '#FC5200';
+  const BLUE = '#2A93EE';
 
   export default defineComponent({
     name: 'InteractiveMap',
     data: () => ({
       map: null as Map | null,
+      drawn: {} as { [segmentId: number]: { polyline: L.Polyline; marker: L.CircleMarker; tooltip: L.Tooltip } },
+      highlighted: null as number | null,
     }),
     mounted() {
       this.map = L.map('map').setView([0.66, 0.42], 2);
@@ -39,7 +42,7 @@
         } else {
           // If location is disabled or not granted
           locatorMessage.addTo(this.map);
-          (this.map as any)._handlers.forEach((handler) => handler.disable());
+          (this.map as any)._handlers.forEach((handler: Handler) => handler.disable());
         }
       });
 
@@ -84,7 +87,7 @@
         this.map.addEventListener('locationfound', () => {
           if (locatorMessage._map) {
             locatorMessage.remove();
-            (this.map as any)._handlers.forEach((handler) => handler.enable());
+            (this.map as any)._handlers.forEach((handler: Handler) => handler.enable());
           }
         });
       }
@@ -96,27 +99,43 @@
         const boundsArray = [bounds?.getSouth(), bounds?.getWest(), bounds?.getNorth(), bounds?.getEast()];
         this.$emit('move', boundsArray);
       },
-      fitBounds(bounds: [number, number][]) {
-        this.map?.fitBounds(bounds);
+      highlight(segmentId: number) {
+        if (this.drawn[segmentId]) {
+          this.drawn[segmentId]?.polyline.setStyle({ color: BLUE, weight: 5 });
+          this.drawn[segmentId]?.marker.setStyle({ fillColor: BLUE }).setRadius(8);
+          this.drawn[segmentId]?.polyline.bringToFront();
+          this.drawn[segmentId]?.marker.bringToFront();
+          this.highlighted = segmentId;
+        }
+      },
+      reset() {
+        if (this.highlighted && this.drawn[this.highlighted]) {
+          this.drawn[this.highlighted].polyline.setStyle({ color: ORANGE, weight: 3 });
+          this.drawn[this.highlighted].marker.setStyle({ fillColor: ORANGE }).setRadius(6);
+        }
+        this.highlighted = null;
       },
       drawSegment(segment: Segment) {
-        const polyline = L.polyline(decode(segment.points), {
-          color: ORANGE,
-          interactive: false,
-        });
-        const marker = L.circleMarker(segment.start_latlng, {
-          radius: 6,
-          stroke: false,
-          fillColor: ORANGE,
-          fillOpacity: 1,
-        });
-        const tooltip = L.tooltip().setContent(segment.name);
-
+        const drawn = {
+          polyline: L.polyline(decode(segment.points), {
+            color: ORANGE,
+            weight: 3,
+            interactive: false,
+          }),
+          marker: L.circleMarker(segment.start_latlng, {
+            radius: 6,
+            stroke: false,
+            fillColor: ORANGE,
+            fillOpacity: 1,
+          }),
+          tooltip: L.tooltip().setContent(segment.name),
+        };
         if (this.map) {
-          polyline.addTo(this.map as Map);
-          marker.addTo(this.map as Map);
-          marker.bindTooltip(tooltip);
+          drawn.polyline.addTo(this.map as Map);
+          drawn.marker.addTo(this.map as Map);
+          drawn.marker.bindTooltip(drawn.tooltip);
         }
+        this.drawn[segment.id] = drawn;
       },
     },
   });

@@ -3,11 +3,10 @@
     <div class="row justify-content-around">
       <div class="col-auto mb-4">
         <div class="btn-group">
-          <input type="radio" class="btn-check" id="local-legend-radio" v-model="recordType" value="LocalLegend" />
-          <label class="btn btn-outline-primary" for="local-legend-radio">Local Legend</label>
-
           <input type="radio" class="btn-check" id="course-record-radio" v-model="recordType" value="CourseRecord" />
           <label class="btn btn-outline-primary" for="course-record-radio">Course Record</label>
+          <input type="radio" class="btn-check" id="local-legend-radio" v-model="recordType" value="LocalLegend" />
+          <label class="btn btn-outline-primary" for="local-legend-radio">Local Legend</label>
         </div>
       </div>
       <div class="col-auto mb-4">
@@ -21,7 +20,14 @@
       </div>
     </div>
 
-    <Result v-for="(segment, i) in orderedSegments" :key="segment.id" :segment="segment" :index="i + 1">
+    <Result
+      v-for="(segment, i) in orderedSegments"
+      :key="segment.id"
+      :segment="segment"
+      :index="i + 1"
+      :highlighted="highlighted === segment.id"
+      @highlight="highlight"
+    >
       <component
         :is="recordType === 'LocalLegend' ? 'LocalLegendResult' : 'CourseRecordResult'"
         :segment="segment"
@@ -53,9 +59,17 @@
     },
 
     data: () => ({
-      recordType: RecordType.LocalLegend,
+      recordType: RecordType.CourseRecord,
       onlyWomen: false,
+      highlighted: null as number | null,
     }),
+    methods: {
+      highlight(segmentId: number) {
+        (this.$root?.$refs.map as any).reset();
+        (this.$root?.$refs.map as any).highlight(segmentId);
+        this.highlighted = segmentId;
+      },
+    },
 
     computed: {
       visibleSegments(): Segment[] {
