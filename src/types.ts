@@ -29,6 +29,9 @@ export type Lcl = {
 export type Xoms = {
   kom: string;
   qom: string;
+  destination: {
+    href: string;
+  };
 };
 
 export enum RecordType {

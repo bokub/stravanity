@@ -35,19 +35,18 @@
         return this._div;
       };
 
-      navigator.permissions?.query({ name: 'geolocation' }).then((PermissionStatus) => {
-        if (PermissionStatus.state == 'granted') {
-          // If location is enabled
-          locator.start();
-        } else {
-          // If location is disabled or not granted
-          locatorMessage.addTo(this.map);
-          (this.map as any)._handlers.forEach((handler: Handler) => handler.disable());
-        }
-      });
-
       this.map.whenReady(() => {
         this.$emit('ready');
+        navigator.permissions?.query({ name: 'geolocation' }).then((PermissionStatus) => {
+          if (PermissionStatus.state == 'granted') {
+            // If location is enabled
+            locator.start();
+          } else {
+            // If location is disabled or not granted
+            locatorMessage.addTo(this.map);
+            (this.map as any)._handlers.forEach((handler: Handler) => handler.disable());
+          }
+        });
       });
 
       // Fixing Leaflet bugs...

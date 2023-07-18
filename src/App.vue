@@ -47,7 +47,7 @@
       Results,
     },
     data: () => ({
-      segments: {} as { [key: string]: Segment },
+      segments: {} as { [key: number]: Segment },
       bounds: undefined as Bounds | undefined,
       problems: {
         limitReached: false,
@@ -106,19 +106,23 @@
               const key = `segment_${segment.id}`;
               const cached = localStorage.getItem(key);
               if (!cached) {
-                await api
-                  .get('/segments/' + segment.id)
-                  .then((res) => res.data)
-                  .then((res: SegmentDetails) => {
-                    this.segments[segment.id].details = res;
-                    localStorage.setItem(key, JSON.stringify(this.segments[segment.id]));
-                  });
+                await this.fetchSegment(segment.id);
               } else {
                 this.segments[segment.id].details = JSON.parse(cached).details;
               }
             }
           })
         );
+      },
+      async fetchSegment(segmentId: number) {
+        const key = `segment_${segmentId}`;
+        await api
+          .get('/segments/' + segmentId)
+          .then((res) => res.data)
+          .then((res: SegmentDetails) => {
+            this.segments[segmentId].details = res;
+            localStorage.setItem(key, JSON.stringify(this.segments[segmentId]));
+          });
       },
       onMapReady() {
         this.segments = Object.keys(localStorage)
