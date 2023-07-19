@@ -9,6 +9,9 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        navigateFallbackDenylist: [/^\/api/],
+      },
       includeAssets: ['favicon.ico', 'img/icons/apple-touch-icon.png', 'img/icons/mask-icon.svg'],
       manifest: {
         name: 'Stravanity',
