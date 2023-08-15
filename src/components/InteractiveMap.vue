@@ -107,7 +107,14 @@
           this.highlighted = segmentId;
         }
       },
-      reset() {
+      clearSegments() {
+        Object.values(this.drawn).forEach((segment) => {
+          segment.polyline.remove();
+          segment.marker.remove();
+          segment.tooltip.remove();
+        });
+      },
+      resetHighLights() {
         if (this.highlighted && this.drawn[this.highlighted]) {
           this.drawn[this.highlighted].polyline.setStyle({ color: ORANGE, weight: 3 });
           this.drawn[this.highlighted].marker.setStyle({ fillColor: ORANGE }).setRadius(6);
@@ -158,6 +165,7 @@
       font-size: 16px;
       font-weight: bold;
       padding: 8px 12px;
+
       img {
         position: relative;
         bottom: 6px;

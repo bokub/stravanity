@@ -1,4 +1,4 @@
-import { type Bounds } from '@/types';
+import { ActivityType, type Bounds } from '@/types';
 
 export function formatDistance(d: number | undefined) {
   if (d === 0) {
@@ -14,13 +14,29 @@ export function formatDistance(d: number | undefined) {
   return `${Math.round(d / 10) / 100} km`;
 }
 
-export function formatSpeed(s: number | undefined) {
-  if (!s) {
+export function formatSpeed(secondsPerKm: number | undefined, type: ActivityType | undefined) {
+  if (!secondsPerKm || !type) {
     return '';
   }
-  const minutes = Math.floor(s);
-  const seconds = Math.round(60 * (s - minutes));
+
+  if (type == ActivityType.Ride) {
+    return formatRideSpeed(secondsPerKm);
+  } else {
+    return formatRunSpeed(secondsPerKm);
+  }
+}
+
+export function formatRunSpeed(secondsPerKm: number) {
+  const minutes = Math.floor(secondsPerKm);
+  const seconds = Math.round(60 * (secondsPerKm - minutes));
+
   return `${minutes}:${seconds.toString().padStart(2, '0')} / km`;
+}
+
+export function formatRideSpeed(secondsPerKm: number) {
+  const kmPerHour = 60 / secondsPerKm;
+
+  return `${kmPerHour.toFixed(1)} km/h`;
 }
 
 export function parseTime(t: string): number {

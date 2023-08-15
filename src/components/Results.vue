@@ -13,11 +13,11 @@
         <div class="btn-group">
           <input type="radio" class="btn-check" id="overall-radio" v-model="onlyWomen" :value="false" />
           <label class="btn btn-outline-primary" for="overall-radio">Overall</label>
-
           <input type="radio" class="btn-check" id="women-radio" v-model="onlyWomen" :value="true" />
           <label class="btn btn-outline-primary" for="women-radio">Women</label>
         </div>
       </div>
+      <slot name="activityType" />
     </div>
 
     <Result
@@ -33,6 +33,10 @@
         :segment="segment"
       ></component>
     </Result>
+
+    <div class="text-center">
+      <p class="text-muted" v-show="segments.length === 0">Move or zoom the map to load segments.</p>
+    </div>
   </div>
 </template>
 
@@ -57,7 +61,6 @@
         required: true,
       },
     },
-
     data: () => ({
       recordType: RecordType.CourseRecord,
       onlyWomen: false,
@@ -65,12 +68,11 @@
     }),
     methods: {
       highlight(segmentId: number) {
-        (this.$root?.$refs.map as any).reset();
+        (this.$root?.$refs.map as any).resetHighLights();
         (this.$root?.$refs.map as any).highlight(segmentId);
         this.highlighted = segmentId;
       },
     },
-
     computed: {
       visibleSegments(): Segment[] {
         return this.segments.filter((s: Segment) => {
