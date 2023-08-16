@@ -35,3 +35,25 @@ Because of the Strava API limits, Stravanity can only load 100 segments every 15
 The 15-minute limit is reset at natural 15-minute intervals corresponding to 0, 15, 30 and 45 minutes after the hour, and the daily limit resets at midnight UTC.
 
 If you reach one of these limits, **the only thing you can do is to wait** and come back later to load new segments.
+
+### For developers
+
+You can run your own version locally or easily on https://vercel.app by making a Strava API app yourself.
+
+The server side code in `api/login.ts` requires these env vars to be set
+
+    STRAVA_ACCESS_TOKEN
+    STRAVA_CLIENT_ID
+    STRAVA_CLIENT_SECRET
+    STRAVA_REDIRECT_URI
+
+The frontend code needs
+
+    VITE_HERE_MAPS_API_KEY
+    VITE_STRAVA_CLIENT_ID
+
+The rest is as easy as
+
+    npm install
+    npm run dev
+    open localhost:5173/

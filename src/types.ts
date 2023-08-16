@@ -12,6 +12,7 @@ export type Segment = {
 };
 
 export type SegmentDetails = {
+  activity_type: ActivityType;
   distance: number;
   local_legend: Lcl;
   xoms: Xoms;
@@ -37,6 +38,11 @@ export type Xoms = {
 export enum RecordType {
   LocalLegend = 'LocalLegend',
   CourseRecord = 'CourseRecord',
+}
+
+export enum ActivityType {
+  Run = 'Run',
+  Ride = 'Ride',
 }
 
 export type Computed = {

@@ -9,7 +9,9 @@
       <div class="h5">{{ segment.computed?.bestTimeString }}</div>
     </div>
     <div class="col-auto">
-      <div class="text-muted small">Best speed</div>
+      <div class="text-muted small">
+        Best {{ segment.details?.activity_type === ActivityType.Ride ? 'speed' : 'pace' }}
+      </div>
       <div class="h5">
         <strong>{{ speed }}</strong>
       </div>
@@ -19,11 +21,14 @@
 
 <script lang="ts">
   import { defineComponent, type PropType } from 'vue';
-  import { type Segment } from '@/types';
+  import { ActivityType, type Segment } from '@/types';
   import { formatDistance, formatSpeed } from '@/utils';
 
   export default defineComponent({
     name: 'CourseRecordResult',
+    data: () => ({
+      ActivityType,
+    }),
     props: {
       segment: {
         type: Object as PropType<Segment>,
@@ -35,7 +40,7 @@
         return formatDistance(this.segment.details?.distance);
       },
       speed(): string {
-        return formatSpeed(this.segment.computed?.speedRecord);
+        return formatSpeed(this.segment.computed?.speedRecord, this.segment.details?.activity_type);
       },
     },
   });

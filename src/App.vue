@@ -8,7 +8,24 @@
         <img src="/img/powered-by-strava.svg" alt="Powered by Strava" height="30" class="float-end" />
       </div>
       <div class="col-12 col-lg-6">
-        <Results :segments="segmentsArray" :bounds="bounds" v-if="bounds && segmentsArray.length > 0"></Results>
+        <Results :segments="segmentsArray" :bounds="bounds" v-if="bounds">
+          <template v-slot:activityType>
+            <div class="col-auto mb-4">
+              <div class="btn-group">
+                <input type="radio" class="btn-check" id="run-radio" v-model="activityType" :value="ActivityType.Run" />
+                <label class="btn btn-outline-primary" for="run-radio">{{ ActivityType.Run }}</label>
+                <input
+                  type="radio"
+                  class="btn-check"
+                  id="ride-radio"
+                  v-model="activityType"
+                  :value="ActivityType.Ride"
+                />
+                <label class="btn btn-outline-primary" for="ride-radio">{{ ActivityType.Ride }}</label>
+              </div>
+            </div>
+          </template>
+        </Results>
         <div v-if="problems.notConnected" class="pt-5 text-center">
           <h4>
             <span class="text-muted">Not connected</span>
@@ -23,7 +40,7 @@
   import { defineComponent } from 'vue';
   import InteractiveMap from './components/InteractiveMap.vue';
   import Results from './components/Results.vue';
-  import { type Bounds, type Segment, type SegmentDetails } from '@/types';
+  import { ActivityType, type Bounds, type Segment, type SegmentDetails } from '@/types';
   import Cookies from 'js-cookie';
   import axios from 'axios';
   import Problems from '@/components/Problems.vue';
@@ -47,6 +64,8 @@
       Results,
     },
     data: () => ({
+      ActivityType,
+      activityType: ActivityType.Run,
       segments: {} as { [key: number]: Segment },
       bounds: undefined as Bounds | undefined,
       problems: {
@@ -54,6 +73,19 @@
         notConnected: false,
       },
     }),
+    watch: {
+      activityType(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          localStorage.setItem('activityType', newVal);
+          const map = this.$refs.map as any;
+          if (map) {
+            map.clearSegments();
+            this.onMapReady();
+            this.loadSegments(this.bounds as Bounds);
+          }
+        }
+      },
+    },
     created() {
       api.interceptors.response.use(
         (res) => {
@@ -80,6 +112,12 @@
         }
       );
     },
+    beforeMount() {
+      const activityType = localStorage.getItem('activityType');
+      if (activityType) {
+        this.activityType = activityType as ActivityType;
+      }
+    },
     methods: {
       async loadSegments(bounds: Bounds) {
         this.bounds = bounds;
@@ -92,7 +130,7 @@
           .get('/segments/explore', {
             params: {
               bounds: bounds.join(','),
-              activity_type: 'running',
+              activity_type: this.activityType === ActivityType.Ride ? 'riding' : 'running',
             },
           })
           .then((res) => res.data.segments);
@@ -127,8 +165,13 @@
       onMapReady() {
         this.segments = Object.keys(localStorage)
           .filter((k) => k.indexOf('segment_') === 0)
+          .filter((k) => {
+            const segmentString = localStorage.getItem(k);
+            const segment: Segment = segmentString && JSON.parse(segmentString);
+            return segment.details?.activity_type === this.activityType;
+          })
           .reduce((p: any, c: string) => {
-            const key = c.substr('segment_'.length);
+            const key = c.substring('segment_'.length);
             p[key] = JSON.parse(localStorage.getItem(c) as string);
             (this.$refs.map as any).drawSegment(p[key]);
             return p;
