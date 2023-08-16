@@ -10,19 +10,11 @@
       <div class="col-12 col-lg-6">
         <Results :segments="segmentsArray" :bounds="bounds" v-if="bounds">
           <template v-slot:activityType>
-            <div class="col-auto mb-4">
-              <div class="btn-group">
-                <input type="radio" class="btn-check" id="run-radio" v-model="activityType" :value="ActivityType.Run" />
-                <label class="btn btn-outline-primary" for="run-radio">{{ ActivityType.Run }}</label>
-                <input
-                  type="radio"
-                  class="btn-check"
-                  id="ride-radio"
-                  v-model="activityType"
-                  :value="ActivityType.Ride"
-                />
-                <label class="btn btn-outline-primary" for="ride-radio">{{ ActivityType.Ride }}</label>
-              </div>
+            <div class="btn-group">
+              <input type="radio" class="btn-check" id="run-radio" v-model="activityType" :value="ActivityType.Run" />
+              <label class="btn btn-outline-primary" for="run-radio">{{ ActivityType.Run }}</label>
+              <input type="radio" class="btn-check" id="ride-radio" v-model="activityType" :value="ActivityType.Ride" />
+              <label class="btn btn-outline-primary" for="ride-radio">{{ ActivityType.Ride }}</label>
             </div>
           </template>
         </Results>
@@ -65,9 +57,9 @@
     },
     data: () => ({
       ActivityType,
-      activityType: ActivityType.Run,
+      activityType: ActivityType.Run as ActivityType,
       segments: {} as { [key: number]: Segment },
-      bounds: undefined as Bounds | undefined,
+      bounds: null as Bounds | null,
       problems: {
         limitReached: false,
         notConnected: false,
@@ -81,7 +73,7 @@
           if (map) {
             map.clearSegments();
             this.onMapReady();
-            this.loadSegments(this.bounds as Bounds);
+            this.loadSegments(this.bounds);
           }
         }
       },
@@ -119,7 +111,10 @@
       }
     },
     methods: {
-      async loadSegments(bounds: Bounds) {
+      async loadSegments(bounds: Bounds | null) {
+        if (!bounds) {
+          return;
+        }
         this.bounds = bounds;
 
         if (this.problems.limitReached) {
@@ -143,10 +138,10 @@
 
               const key = `segment_${segment.id}`;
               const cached = localStorage.getItem(key);
-              if (!cached) {
-                await this.fetchSegment(segment.id);
-              } else {
+              if (cached) {
                 this.segments[segment.id].details = JSON.parse(cached).details;
+              } else {
+                await this.fetchSegment(segment.id);
               }
             }
           })
@@ -165,15 +160,13 @@
       onMapReady() {
         this.segments = Object.keys(localStorage)
           .filter((k) => k.indexOf('segment_') === 0)
-          .filter((k) => {
-            const segmentString = localStorage.getItem(k);
-            const segment: Segment = segmentString && JSON.parse(segmentString);
-            return segment.details?.activity_type === this.activityType;
-          })
           .reduce((p: any, c: string) => {
             const key = c.substring('segment_'.length);
-            p[key] = JSON.parse(localStorage.getItem(c) as string);
-            (this.$refs.map as any).drawSegment(p[key]);
+            const segment = JSON.parse(localStorage.getItem(c) as string);
+            if (segment.details?.activity_type === this.activityType) {
+              p[key] = segment;
+              (this.$refs.map as any).drawSegment(p[key]);
+            }
             return p;
           }, {});
       },

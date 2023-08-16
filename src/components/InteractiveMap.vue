@@ -107,19 +107,20 @@
           this.highlighted = segmentId;
         }
       },
-      clearSegments() {
-        Object.values(this.drawn).forEach((segment) => {
-          segment.polyline.remove();
-          segment.marker.remove();
-          segment.tooltip.remove();
-        });
-      },
-      resetHighLights() {
+      resetHighlighting() {
         if (this.highlighted && this.drawn[this.highlighted]) {
           this.drawn[this.highlighted].polyline.setStyle({ color: ORANGE, weight: 3 });
           this.drawn[this.highlighted].marker.setStyle({ fillColor: ORANGE }).setRadius(6);
         }
         this.highlighted = null;
+      },
+      clearSegments() {
+        for (const segment of Object.values(this.drawn)) {
+          segment.polyline.remove();
+          segment.marker.remove();
+          segment.tooltip.remove();
+        }
+        this.drawn = {};
       },
       drawSegment(segment: Segment) {
         const drawn = {

@@ -17,7 +17,9 @@
           <label class="btn btn-outline-primary" for="women-radio">Women</label>
         </div>
       </div>
-      <slot name="activityType" />
+      <div class="col-auto mb-4">
+        <slot name="activityType" />
+      </div>
     </div>
 
     <Result
@@ -62,13 +64,13 @@
       },
     },
     data: () => ({
-      recordType: RecordType.CourseRecord,
+      recordType: RecordType.CourseRecord as RecordType,
       onlyWomen: false,
       highlighted: null as number | null,
     }),
     methods: {
       highlight(segmentId: number) {
-        (this.$root?.$refs.map as any).resetHighLights();
+        (this.$root?.$refs.map as any).resetHighlighting();
         (this.$root?.$refs.map as any).highlight(segmentId);
         this.highlighted = segmentId;
       },

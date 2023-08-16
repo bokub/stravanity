@@ -10,7 +10,7 @@
     </div>
     <div class="col-auto">
       <div class="text-muted small">
-        Best {{ segment.details?.activity_type === ActivityType.Ride ? 'speed' : 'pace' }}
+        {{ label }}
       </div>
       <div class="h5">
         <strong>{{ speed }}</strong>
@@ -26,9 +26,6 @@
 
   export default defineComponent({
     name: 'CourseRecordResult',
-    data: () => ({
-      ActivityType,
-    }),
     props: {
       segment: {
         type: Object as PropType<Segment>,
@@ -41,6 +38,9 @@
       },
       speed(): string {
         return formatSpeed(this.segment.computed?.speedRecord, this.segment.details?.activity_type);
+      },
+      label(): string {
+        return this.segment.details?.activity_type === ActivityType.Ride ? 'Best speed' : 'Best pace';
       },
     },
   });
