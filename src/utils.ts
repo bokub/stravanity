@@ -14,21 +14,21 @@ export function formatDistance(d: number | undefined) {
   return `${Math.round(d / 10) / 100} km`;
 }
 
-export function formatSpeed(secondsPerKm: number | undefined, type: ActivityType | undefined) {
-  if (!secondsPerKm || !type) {
+export function formatSpeed(minutesPerKm: number | undefined, type: ActivityType | undefined) {
+  if (!minutesPerKm || !type) {
     return '';
   }
 
   if (type == ActivityType.Ride) {
-    return formatRideSpeed(secondsPerKm);
+    return formatRideSpeed(minutesPerKm);
   } else {
-    return formatRunSpeed(secondsPerKm);
+    return formatRunSpeed(minutesPerKm);
   }
 }
 
-export function formatRunSpeed(secondsPerKm: number) {
-  const minutes = Math.floor(secondsPerKm);
-  const seconds = Math.round(60 * (secondsPerKm - minutes));
+export function formatRunSpeed(minutesPerKm: number) {
+  const minutes = Math.floor(minutesPerKm);
+  const seconds = Math.round(60 * (minutesPerKm - minutes));
 
   return `${minutes}:${seconds.toString().padStart(2, '0')} / km`;
 }
@@ -50,6 +50,17 @@ export function parseTime(t: string): number {
     return Number(t.split(':')[1]) + 60 * Number(t.split(':')[0]);
   }
   return 0;
+}
+
+export function formatTime(t: number): string {
+  const minutes = Math.floor(t / 60);
+  const seconds = Math.round(t % 60);
+
+  if (minutes === 0) {
+    return `${seconds}s`;
+  }
+
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
 export function isInBounds(p: [number, number], bounds: Bounds): boolean {

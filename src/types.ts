@@ -8,6 +8,7 @@ export type Segment = {
   starred: boolean;
   elevation_profile: string;
   details?: SegmentDetails;
+  cache_date?: number;
   computed?: Computed;
 };
 
@@ -16,6 +17,10 @@ export type SegmentDetails = {
   distance: number;
   local_legend: Lcl;
   xoms: Xoms;
+  athlete_segment_stats: {
+    effort_count: number;
+    pr_elapsed_time: number;
+  };
 };
 
 export type Lcl = {

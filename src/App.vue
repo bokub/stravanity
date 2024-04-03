@@ -2,8 +2,8 @@
   <div class="container bg-white shadow rounded px-3 py-3 my-3">
     <Top class="mt-3 mb-4 mx-2"></Top>
     <Problems v-bind="problems"></Problems>
-    <div class="row">
-      <div class="col-12 col-lg-6">
+    <div class="row align-items-start">
+      <div class="col-12 col-lg-6 mb-5 map-col">
         <InteractiveMap @move="loadSegments" @ready="onMapReady" ref="map"></InteractiveMap>
         <img src="/img/powered-by-strava.svg" alt="Powered by Strava" height="30" class="float-end" />
       </div>
@@ -135,14 +135,7 @@
             if (!this.segments[segment.id]) {
               this.segments[segment.id] = segment;
               (this.$refs.map as any).drawSegment(segment);
-
-              const key = `segment_${segment.id}`;
-              const cached = localStorage.getItem(key);
-              if (cached) {
-                this.segments[segment.id].details = JSON.parse(cached).details;
-              } else {
-                await this.fetchSegment(segment.id);
-              }
+              await this.fetchSegment(segment.id);
             }
           })
         );
@@ -154,6 +147,7 @@
           .then((res) => res.data)
           .then((res: SegmentDetails) => {
             this.segments[segmentId].details = res;
+            this.segments[segmentId].cache_date = new Date().getTime();
             localStorage.setItem(key, JSON.stringify(this.segments[segmentId]));
           });
       },
@@ -163,7 +157,10 @@
           .reduce((p: any, c: string) => {
             const key = c.substring('segment_'.length);
             const segment = JSON.parse(localStorage.getItem(c) as string);
-            if (segment.details?.activity_type === this.activityType) {
+            const isExpired = new Date().getTime() - (segment.cache_date || 0) > 1000 * 3600 * 24 * 30; // 30 days
+            if (isExpired) {
+              localStorage.removeItem(c);
+            } else if (segment.details?.activity_type === this.activityType) {
               p[key] = segment;
               (this.$refs.map as any).drawSegment(p[key]);
             }
@@ -187,5 +184,12 @@
 
   .title {
     font-family: 'Merriweather', serif;
+  }
+
+  @media (min-width: 992px) {
+    .map-col {
+      position: sticky;
+      top: 100px;
+    }
   }
 </style>
