@@ -14,8 +14,9 @@
             {{ segment.name }}
           </span>
         </div>
-        <div class="col-auto">
+        <div class="col-auto position-relative">
           <img :src="segment.elevation_profile" alt="Elevation profile" height="25" />
+          <div class="avg-grade" v-if="segment.avg_grade">{{ segment.avg_grade }} %</div>
         </div>
         <div class="col-auto">
           <div class="dropdown dropstart">
@@ -75,8 +76,17 @@
   });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .card-body {
     cursor: pointer;
+  }
+  .avg-grade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
   }
 </style>

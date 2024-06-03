@@ -7,6 +7,7 @@ export type Segment = {
   local_legend_enabled: boolean;
   starred: boolean;
   elevation_profile: string;
+  avg_grade: number;
   details?: SegmentDetails;
   cache_date?: number;
   computed?: Computed;
