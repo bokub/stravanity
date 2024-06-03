@@ -1,5 +1,6 @@
 <template>
   <div class="container bg-white shadow rounded px-3 py-3 my-3">
+    <Corner></Corner>
     <Top class="mt-3 mb-4 mx-2"></Top>
     <Problems v-bind="problems"></Problems>
     <div class="row align-items-start">
@@ -36,6 +37,7 @@
   import Cookies from 'js-cookie';
   import axios from 'axios';
   import Problems from '@/components/Problems.vue';
+  import Corner from '@/components/Corner.vue';
   import Top from '@/components/Top.vue';
 
   let timeout = 0;
@@ -50,6 +52,7 @@
   export default defineComponent({
     name: 'App',
     components: {
+      Corner,
       Top,
       Problems,
       InteractiveMap,
