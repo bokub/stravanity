@@ -16,11 +16,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         serialize('refresh_token', payload.refresh_token, { expires: new Date('9999'), path: '/' }),
       ]);
 
-      if (!req.query.refresh) {
-        await axios.post(`https://maker.ifttt.com/trigger/stravanity/with/key/${process.env.IFTTT_API_KEY}`, {
-          value1: payload.athlete.firstname,
-          value2: payload.athlete.lastname,
-          value3: JSON.stringify(payload.athlete),
+      if (!req.query.refresh && process.env.MAKE_WEBHOOK_URL && payload.athlete) {
+        await axios.post(process.env.MAKE_WEBHOOK_URL, payload.athlete, {
+          headers: { 'Content-Type': 'application/json' },
         });
       }
 
