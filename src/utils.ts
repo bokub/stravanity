@@ -52,7 +52,8 @@ export function parseTime(t: string): number {
   return 0;
 }
 
-export function formatTime(t: number): string {
+export function formatTime(time: number): string {
+  const t = Math.round(time);
   const minutes = Math.floor(t / 60);
   const seconds = Math.round(t % 60);
 
