@@ -27,8 +27,12 @@ export function formatSpeed(minutesPerKm: number | undefined, type: ActivityType
 }
 
 export function formatRunSpeed(minutesPerKm: number) {
-  const minutes = Math.floor(minutesPerKm);
-  const seconds = Math.round(60 * (minutesPerKm - minutes));
+  let minutes = Math.floor(minutesPerKm);
+  let seconds = Math.round(60 * (minutesPerKm - minutes));
+  if (seconds >= 60) {
+    minutes++;
+    seconds = seconds - 60;
+  }
 
   return `${minutes}:${seconds.toString().padStart(2, '0')} / km`;
 }
@@ -52,8 +56,7 @@ export function parseTime(t: string): number {
   return 0;
 }
 
-export function formatTime(time: number): string {
-  const t = Math.round(time);
+export function formatTime(t: number): string {
   const minutes = Math.floor(t / 60);
   const seconds = Math.round(t % 60);
 
