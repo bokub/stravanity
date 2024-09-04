@@ -2,11 +2,11 @@
 
 > Easy to beat Strava segments
 
-[![Screenshot](https://i.imgur.com/fetPVQg.png)](https://stravanity.vercel.app/)
+[![Screenshot](https://i.imgur.com/fetPVQg.png)](https://stravanity.boris.sh/)
 
 Stravanity is a simple tool designed to help you explore Strava segments near you, and find the **easiest ones to beat**.
 
-Visit [stravanity.vercel.app](https://stravanity.vercel.app/) to try it.
+Visit [stravanity.boris.sh](https://stravanity.boris.sh/) to try it.
 
 ### There are 2 ways to beat a Strava segment
 

@@ -13,7 +13,7 @@ npm run dev
 
 Open `localhost:5173` in your browser
 
-Copy the `access_token` cookie from https://stravanity.vercel.app/ and paste it in your local version to connect to Strava
+Copy the `access_token` cookie from https://stravanity.boris.sh/ and paste it in your local version to connect to Strava
 
 ### Run with your own Strava app + Vercel
 
