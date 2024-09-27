@@ -2,7 +2,7 @@
 
 > Easy to beat Strava segments
 
-[![Screenshot](https://i.imgur.com/fetPVQg.png)](https://stravanity.boris.sh/)
+[![Screenshot](https://github.com/user-attachments/assets/f80bac1a-c01d-4f58-8220-1ffbb6a12d8b)](https://stravanity.boris.sh/)
 
 Stravanity is a simple tool designed to help you explore Strava segments near you, and find the **easiest ones to beat**.
 
