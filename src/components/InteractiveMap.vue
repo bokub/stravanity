@@ -65,16 +65,10 @@
       });
 
       if (this.map) {
-        L.tileLayer(
-          `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/reduced.day/{z}/{x}/{y}/256/png?apiKey=${
-            import.meta.env.VITE_HERE_MAPS_API_KEY
-          }`,
-          {
-            tileSize: 256,
-            subdomains: '1234',
-            attribution: '&copy; HERE ' + new Date().getFullYear(),
-          }
-        ).addTo(this.map as Map);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@x2.png', {
+          subdomains: ['a', 'b', 'c'],
+          attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>',
+        }).addTo(this.map as Map);
 
         this.map.on(
           'moveend',
