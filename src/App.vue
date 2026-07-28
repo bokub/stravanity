@@ -27,6 +27,8 @@
       </div>
     </div>
   </div>
+
+  <StartupNotice />
 </template>
 
 <script lang="ts">
@@ -39,6 +41,7 @@
   import Problems from '@/components/Problems.vue';
   import Corner from '@/components/Corner.vue';
   import Top from '@/components/Top.vue';
+  import StartupNotice from '@/components/StartupNotice.vue';
 
   let timeout = 0;
 
@@ -57,6 +60,7 @@
       Problems,
       InteractiveMap,
       Results,
+      StartupNotice,
     },
     data: () => ({
       ActivityType,
