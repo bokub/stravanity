@@ -16,23 +16,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         serialize('refresh_token', payload.refresh_token, { expires: new Date('9999'), path: '/' }),
       ]);
 
-      if (!req.query.refresh && process.env.MAKE_WEBHOOK_URL && payload.athlete) {
-        await axios.post(process.env.MAKE_WEBHOOK_URL, payload.athlete, {
-          headers: { 'Content-Type': 'application/json' },
-        });
-      }
-
       res.redirect(302, '/');
-      return;
     } catch (e) {
+      console.error('Login error:', e);
       // Clear cookies
       res.setHeader('Set-Cookie', [
         serialize('access_token', '_', { expires: new Date(0), path: '/' }),
         serialize('refresh_token', '_', { expires: new Date(0), path: '/' }),
       ]);
       res.redirect(302, '/');
-      return;
     }
+
+    if (!req.query.refresh && process.env.MAKE_WEBHOOK_URL) {
+      try {
+        const payload = await (req.query.refresh
+          ? strava.oauth.refreshToken(req.query.code)
+          : strava.oauth.getToken(req.query.code));
+        if (payload.athlete) {
+          await axios.post(process.env.MAKE_WEBHOOK_URL, payload.athlete, {
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+      } catch (webhookError) {
+        console.error('Failed to call webhook:', webhookError);
+      }
+    }
+    return;
   }
   res.redirect(302, '/');
 }
